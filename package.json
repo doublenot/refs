@@ -1,0 +1,26 @@
+{
+  "name": "refs",
+  "version": "0.0.1",
+  "description": "Compile YAML or JSON config files together through file path references using `$ref` setting",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/doublenot/refs.git"
+  },
+  "keywords": [
+    "json",
+    "yaml",
+    "ref",
+    "refs",
+    "reference",
+    "references",
+    "yaml-ref",
+    "json-ref",
+    "compile"
+  ],
+  "author": "doublenot",
+  "license": "MIT"
+}
