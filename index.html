@@ -36,6 +36,43 @@
 <h3>
 <a id="example" class="anchor" href="#example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example:</h3>
 
+<h4>
+<a id="templates" class="anchor" href="#templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Template(s):</h4>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-ent">AWSTemplateFormatVersion:</span> <span class="pl-s"><span class="pl-pds">'</span>2010-09-09<span class="pl-pds">'</span></span>
+
+<span class="pl-ent">Resources:</span>
+  - <span class="pl-ent">$ref:</span> <span class="pl-s">./relative/path/to/file.yaml</span></pre></div>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-ent">RolePolicies:</span>
+  <span class="pl-ent">$ref:</span> <span class="pl-s">./resources/role-policies.yaml</span></pre></div>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-ent">Type:</span> <span class="pl-s"><span class="pl-pds">'</span>AWS::IAM::Policy<span class="pl-pds">'</span></span>
+<span class="pl-ent">Properties:</span>
+  <span class="pl-ent">PolicyName:</span> <span class="pl-s">custom-role</span>
+  <span class="pl-ent">Roles:</span>
+    - <span class="pl-s">custom-role</span>
+  <span class="pl-ent">PolicyDocument:</span>
+    <span class="pl-ent">Version:</span> <span class="pl-s"><span class="pl-pds">'</span>2012-10-17<span class="pl-pds">'</span></span>
+    <span class="pl-ent">Statement:</span>
+      -
+        <span class="pl-ent">Sid:</span> <span class="pl-s">PassRole</span>
+        <span class="pl-ent">Effect:</span> <span class="pl-s">Allow</span>
+        <span class="pl-ent">Resource:</span>
+          -
+            <span class="pl-ent">'Fn::Join':</span>
+              - <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>
+              -
+                - <span class="pl-s"><span class="pl-pds">'</span>arn:aws:iam::<span class="pl-pds">'</span></span>
+                -
+                  <span class="pl-ent">Ref:</span> <span class="pl-s"><span class="pl-pds">'</span>AWS::AccountId<span class="pl-pds">'</span></span>
+                - <span class="pl-s"><span class="pl-pds">'</span>:role/*<span class="pl-pds">'</span></span>
+        <span class="pl-ent">Action:</span>
+          - <span class="pl-s"><span class="pl-pds">'</span>iam:PassRole<span class="pl-pds">'</span></span></pre></div>
+
+<h4>
+<a id="code" class="anchor" href="#code" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Code:</h4>
+
 <div class="highlight highlight-source-js"><pre><span class="pl-s"><span class="pl-pds">'</span>use strict<span class="pl-pds">'</span></span>;
 
 <span class="pl-k">const</span> <span class="pl-c1">path</span> <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>path<span class="pl-pds">'</span></span>);
@@ -55,6 +92,31 @@
   <span class="pl-en">console</span>.<span class="pl-c1">error</span>(<span class="pl-smi">e</span>.<span class="pl-smi">message</span>);
   <span class="pl-en">console</span>.<span class="pl-c1">error</span>(<span class="pl-smi">e</span>.<span class="pl-smi">stack</span>);
 }</pre></div>
+
+<h4>
+<a id="output" class="anchor" href="#output" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Output:</h4>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-ent">AWSTemplateFormatVersion:</span> <span class="pl-s"><span class="pl-pds">'</span>2010-09-09<span class="pl-pds">'</span></span>
+<span class="pl-ent">Resources:</span>
+  - <span class="pl-ent">RolePolicies:</span>
+      <span class="pl-ent">Type:</span> <span class="pl-s"><span class="pl-pds">'</span>AWS::IAM::Policy<span class="pl-pds">'</span></span>
+      <span class="pl-ent">Properties:</span>
+        <span class="pl-ent">PolicyName:</span> <span class="pl-s">custom-role</span>
+        <span class="pl-ent">Roles:</span>
+          - <span class="pl-s">custom-role</span>
+        <span class="pl-ent">PolicyDocument:</span>
+          <span class="pl-ent">Version:</span> <span class="pl-s"><span class="pl-pds">'</span>2012-10-17<span class="pl-pds">'</span></span>
+          <span class="pl-ent">Statement:</span>
+            - <span class="pl-ent">Sid:</span> <span class="pl-s">PassRole</span>
+              <span class="pl-ent">Effect:</span> <span class="pl-s">Allow</span>
+              <span class="pl-ent">Resource:</span>
+                - <span class="pl-ent">'Fn::Join':</span>
+                    - <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>
+                    - <span class="pl-s">- 'arn:aws:iam::'</span>
+                      - <span class="pl-ent">Ref:</span> <span class="pl-s"><span class="pl-pds">'</span>AWS::AccountId<span class="pl-pds">'</span></span>
+                      - <span class="pl-s"><span class="pl-pds">'</span>:role/*<span class="pl-pds">'</span></span>
+              <span class="pl-ent">Action:</span>
+                - <span class="pl-s"><span class="pl-pds">'</span>iam:PassRole<span class="pl-pds">'</span></span></pre></div>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/doublenot">doublenot</a></p>
