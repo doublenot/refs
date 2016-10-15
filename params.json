@@ -1,0 +1,6 @@
+{
+  "name": "refs",
+  "tagline": "Compile YAML or JSON config files together through file path references using `$ref` setting",
+  "body": "### Install:\r\n\r\n```bash\r\n$ npm install -g refs\r\n```\r\n\r\n### Example:\r\n\r\n```javascript\r\n'use strict';\r\n\r\nconst path = require('path');\r\nconst refs = require('refs');\r\n\r\nconst templateDir = `${__dirname}/../templates`;\r\nconst buildDir = `${__dirname}/../build`;\r\nconst inputTemplate = path.resolve(`${templateDir}/template.yaml`);\r\nconst outputFile = path.resolve(`${buildDir}/output-template.yaml`);\r\n\r\ntry {\r\n  refs(inputTemplate, outputFile)\r\n    .then((results) => {\r\n      console.log(`\\n  File written: ${results.outputFile}`);\r\n    });\r\n} catch (e) {\r\n  console.error(e.message);\r\n  console.error(e.stack);\r\n}\r\n```",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}

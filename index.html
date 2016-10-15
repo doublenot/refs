@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>refs by doublenot</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>refs</h1>
+        <p>Compile YAML or JSON config files together through file path references using `$ref` setting</p>
+
+        <p class="view"><a href="https://github.com/doublenot/refs">View the Project on GitHub <small>doublenot/refs</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/doublenot/refs/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/doublenot/refs/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/doublenot/refs">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h3>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install:</h3>
+
+<div class="highlight highlight-source-shell"><pre>$ npm install -g refs</pre></div>
+
+<h3>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example:</h3>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-s"><span class="pl-pds">'</span>use strict<span class="pl-pds">'</span></span>;
+
+<span class="pl-k">const</span> <span class="pl-c1">path</span> <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>path<span class="pl-pds">'</span></span>);
+<span class="pl-k">const</span> <span class="pl-c1">refs</span> <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>refs<span class="pl-pds">'</span></span>);
+
+<span class="pl-k">const</span> <span class="pl-c1">templateDir</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">`</span><span class="pl-s1"><span class="pl-pse">${</span><span class="pl-c1">__dirname</span><span class="pl-pse">}</span></span>/../templates<span class="pl-pds">`</span></span>;
+<span class="pl-k">const</span> <span class="pl-c1">buildDir</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">`</span><span class="pl-s1"><span class="pl-pse">${</span><span class="pl-c1">__dirname</span><span class="pl-pse">}</span></span>/../build<span class="pl-pds">`</span></span>;
+<span class="pl-k">const</span> <span class="pl-c1">inputTemplate</span> <span class="pl-k">=</span> <span class="pl-smi">path</span>.<span class="pl-en">resolve</span>(<span class="pl-s"><span class="pl-pds">`</span><span class="pl-s1"><span class="pl-pse">${</span>templateDir<span class="pl-pse">}</span></span>/template.yaml<span class="pl-pds">`</span></span>);
+<span class="pl-k">const</span> <span class="pl-c1">outputFile</span> <span class="pl-k">=</span> <span class="pl-smi">path</span>.<span class="pl-en">resolve</span>(<span class="pl-s"><span class="pl-pds">`</span><span class="pl-s1"><span class="pl-pse">${</span>buildDir<span class="pl-pse">}</span></span>/output-template.yaml<span class="pl-pds">`</span></span>);
+
+<span class="pl-k">try</span> {
+  <span class="pl-en">refs</span>(inputTemplate, outputFile)
+    .<span class="pl-en">then</span>((<span class="pl-smi">results</span>) <span class="pl-k">=&gt;</span> {
+      <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">`</span><span class="pl-cce">\n</span>  File written: <span class="pl-s1"><span class="pl-pse">${</span><span class="pl-smi">results</span>.<span class="pl-smi">outputFile</span><span class="pl-pse">}</span></span><span class="pl-pds">`</span></span>);
+    });
+} <span class="pl-k">catch</span> (e) {
+  <span class="pl-en">console</span>.<span class="pl-c1">error</span>(<span class="pl-smi">e</span>.<span class="pl-smi">message</span>);
+  <span class="pl-en">console</span>.<span class="pl-c1">error</span>(<span class="pl-smi">e</span>.<span class="pl-smi">stack</span>);
+}</pre></div>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/doublenot">doublenot</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
