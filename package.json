@@ -3,8 +3,20 @@
   "version": "0.0.1",
   "description": "Compile YAML or JSON config files together through file path references using `$ref` setting",
   "main": "index.js",
+  "preferGlobal": true,
+  "bin": {
+    "refs": "bin/refs.js"
+  },
+  "engines": {
+    "node": ">=4.3.2"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run lint && npm run test-all",
+    "coverage": "istanbul cover _mocha test/all",
+    "coveralls": "istanbul cover _mocha test/all && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "gh-pages-travis": "gh-pages-travis",
+    "lint": "./node_modules/.bin/eslint index.js lib/ scripts/ test/",
+    "test-all": "cross-env NODE_ENV=test mocha test/all"
   },
   "repository": {
     "type": "git",
@@ -22,5 +34,25 @@
     "compile"
   ],
   "author": "doublenot",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "commander": "^2.9.0",
+    "node-yaml": "^3.0.3"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.14",
+    "cross-env": "^3.1.2",
+    "eslint": "^3.7.1",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-import": "^2.0.1",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-promise": "^3.0.0",
+    "eslint-plugin-react": "^6.4.1",
+    "gh-pages-travis": "^1.0.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.1.2",
+    "should": "^11.1.1",
+    "testdouble": "^1.8.0"
+  }
 }
