@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+- v4.3.2
+- v4.6.0
+- v6.8.1
+sudo: false
+before_install:
+- npm install -g npm
+install:
+- npm install
+script:
+- npm run test
+- npm run coverage
+after_success:
+- npm run coveralls
+deploy:
+  provider: npm
+  email: ilya@doublenot.co
+  api_key:
+    secure: "nXMSm7j81FwKKWVN6kUTHg4+Ih9stbUsDWG1OOLJZ8RBwtc1Vw0zrVI6tQtX5rTJKCIJm+5mR0MoIswTiPypTQBhCDKpTRZZ+wTU4Q3ciZrZrIRstK7C5AiUDM3/Kc1arY2kbpyEKPspPEEnWtMWxc42WnGYzo7c6NfWQRy0wCI11wwNOyf/tsO3hswxZE8rD6w7bVlRWn67bvXXcuBZiXYVLhfMVYcZFXxUrbP4Ojg08HhMX8S1AtrCxu+yMBHBxX84aOdGu23rsR/+Brc111R1bgNqQmSnRaIng+dHaoRmaEVbxHBOfAEXliBAXlZlaaXpbLBlaOnK61zaG23mkwTB5M7JxQWjgQwfhxv9jQ1Gq4gGtXNsp0lcZyNj0TUaP2b55Wxuj8iXgZ2VU/zYr7SddHX8P/J+QQE5Ojj7WauV1gDZSJ7nJMs3AP9gdWpb6kjYJLPQ6O/Te+ieSlmN0P3vGlY4Vlsmfh3x5WXjo7muAVMuktxENmc0aTY+gwZdqy2ZI3Ryj0o5//kuuW5FPqTRsTCysfW2mG6HR4DNJRNjKV/22kIZth6coh0XVmbYnEAhrkdeiOt9q2iarjrfA60/UiA8dZ1+wKUNwExhr/2YifxU6+SG+pq71wDBSSHRK1G8OQMl50R+RuFbwqYKg8Cm/tzle/EIInMgyrtmTU4="
+  on:
+    tags: true
+    repo: doublenot/refs
