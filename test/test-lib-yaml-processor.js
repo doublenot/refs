@@ -3,7 +3,6 @@
 const should = require('should');
 const fs = require('fs');
 const yaml = require('node-yaml');
-// const Promise = require('bluebird');
 const td = require('testdouble');
 
 describe('YAML Tests', () => {
@@ -11,9 +10,7 @@ describe('YAML Tests', () => {
   const YAML_REF_FILE = '/tmp/file-refs.yaml';
   const YAML_FILE_WRITE = '/tmp/file-write.yaml';
 
-  beforeEach(() => {
-
-  });
+  beforeEach(() => {});
 
   afterEach(() => {
     td.reset();

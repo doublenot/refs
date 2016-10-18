@@ -1,0 +1,5 @@
+{
+  "another": {
+    "$ref": "./file.json"
+  }
+}
