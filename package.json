@@ -1,6 +1,6 @@
 {
   "name": "refs",
-  "version": "0.0.2",
+  "version": "0.3.0",
   "description": "Compile YAML, JSON or INI config files together through file path references using `$ref` setting",
   "main": "index.js",
   "preferGlobal": true,
