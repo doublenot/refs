@@ -1,10 +1,11 @@
 #!/usr/bin/env node
+/* eslint no-console: 0 */
 
 'use strict';
 
 const program = require('commander');
 const pkgInfo = require('../package.json');
-const refs = require('..');
+const refs = require('../index');
 
 let inputFile = null;
 let outputFile = null;
