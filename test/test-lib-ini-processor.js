@@ -48,7 +48,7 @@ describe('INI Tests', () => {
     fs.writeFileSync(INI_FILE, '', 'utf-8');
     td.replace(ini, 'parse', () => {
       throw new Error('An error occurred.');
-    })
+    });
     const iniProcessor = require('../lib/processor-ini');
 
     iniProcessor.process(INI_FILE)
