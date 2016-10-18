@@ -136,7 +136,7 @@ describe('Index Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err.message).be.eql('Unexpected token u');
+        should(err).be.eql('An error occurred while parsing JSON string.');
         done();
       });
   });
