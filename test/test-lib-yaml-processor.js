@@ -8,6 +8,7 @@ const td = require('testdouble');
 describe('YAML Tests', () => {
   const YAML_FILE = '/tmp/file.yaml';
   const YAML_REF_FILE = '/tmp/file-refs.yaml';
+  const YAML_MERGE_FILE = '/tmp/file-merge.yaml';
   const YAML_FILE_WRITE = '/tmp/file-write.yaml';
 
   beforeEach(() => {});
@@ -21,6 +22,11 @@ describe('YAML Tests', () => {
     }
     try {
       fs.unlinkSync(YAML_REF_FILE);
+    } catch (e) {
+      // suppress error
+    }
+    try {
+      fs.unlinkSync(YAML_MERGE_FILE);
     } catch (e) {
       // suppress error
     }
@@ -39,7 +45,7 @@ describe('YAML Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err.message).be.eql('Path must be a string. Received undefined');
+        should(err).be.eql('Requires a file path to process.');
         done();
       });
   });
@@ -58,7 +64,7 @@ describe('YAML Tests', () => {
       });
   });
 
-  it('process: should process the file with no refs', (done) => {
+  it('process: should process the file with no ref settings', (done) => {
     const yamlContent = fs.readFileSync(YAML_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
     fs.writeFileSync(YAML_FILE, yamlContent, 'utf-8');
     const yamlProcessor = require('../lib/processor-yaml');
@@ -76,7 +82,7 @@ describe('YAML Tests', () => {
       });
   });
 
-  it('process: should process the file with refs', (done) => {
+  it('process: should process the file with ref settings', (done) => {
     const yamlContent = fs.readFileSync(YAML_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
     const yamlRefContent = fs.readFileSync(YAML_REF_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
     fs.writeFileSync(YAML_FILE, yamlContent, 'utf-8');
@@ -87,6 +93,61 @@ describe('YAML Tests', () => {
       .then((results) => {
         should(results).be.eql({
           dataString: '{"another":{"test":true}}',
+          key: undefined,
+        });
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  it('process: should throw error the file with malformed merge settings', (done) => {
+    fs.writeFileSync(YAML_MERGE_FILE, '$merge:\n  - one: true\n  - two: true\n', 'utf-8');
+    const yamlProcessor = require('../lib/processor-yaml');
+
+    yamlProcessor.process(YAML_MERGE_FILE)
+      .then(() => {
+        done('Rejection failed.');
+      })
+      .catch((err) => {
+        should(err).be.eql('Malformed merge setting, please check the input file.');
+        done();
+      });
+  });
+
+  it('process: should throw error the file with malformed merge settings with ref settings', (done) => {
+    const yamlContent = fs.readFileSync(YAML_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    const yamlRefContent = fs.readFileSync(YAML_REF_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    const yamlMergeContent = fs.readFileSync(YAML_MERGE_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    fs.writeFileSync(YAML_FILE, yamlContent, 'utf-8');
+    fs.writeFileSync(YAML_REF_FILE, yamlRefContent, 'utf-8');
+    fs.writeFileSync(YAML_MERGE_FILE, `${yamlMergeContent}\nanother:\n  $merge:\n    - one: true\n    - two: true\n`, 'utf-8');
+    const yamlProcessor = require('../lib/processor-yaml');
+
+    yamlProcessor.process(YAML_MERGE_FILE)
+      .then(() => {
+        done('Rejection failed.');
+      })
+      .catch((err) => {
+        should(err).be.eql('Malformed merge setting, please check the input file.');
+        done();
+      });
+  });
+
+  it('process: should process the file with merge settings', (done) => {
+    const yamlContent = fs.readFileSync(YAML_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    const yamlRefContent = fs.readFileSync(YAML_REF_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    const yamlMergeContent = fs.readFileSync(YAML_MERGE_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    fs.writeFileSync(YAML_FILE, yamlContent, 'utf-8');
+    fs.writeFileSync(YAML_REF_FILE, yamlRefContent, 'utf-8');
+    fs.writeFileSync(YAML_MERGE_FILE, yamlMergeContent, 'utf-8');
+    const yamlProcessor = require('../lib/processor-yaml');
+
+    yamlProcessor.process(YAML_MERGE_FILE)
+      .then((results) => {
+        should(results).be.eql({
+          dataString: '{"test":{"test":true,"another":{"test":true}}}',
           key: undefined,
         });
         done();

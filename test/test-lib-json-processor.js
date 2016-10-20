@@ -7,6 +7,7 @@ const td = require('testdouble');
 describe('JSON Tests', () => {
   const JSON_FILE = '/tmp/file.json';
   const JSON_REF_FILE = '/tmp/file-refs.json';
+  const JSON_MERGE_FILE = '/tmp/file-merge.json';
   const JSON_FILE_WRITE = '/tmp/file-write.json';
 
   beforeEach(() => {});
@@ -20,6 +21,11 @@ describe('JSON Tests', () => {
     }
     try {
       fs.unlinkSync(JSON_REF_FILE);
+    } catch (e) {
+      // suppress error
+    }
+    try {
+      fs.unlinkSync(JSON_MERGE_FILE);
     } catch (e) {
       // suppress error
     }
@@ -38,7 +44,7 @@ describe('JSON Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Empty file, nothing to process.');
+        should(err).be.eql('Requires a file path to process.');
         done();
       });
   });
@@ -57,7 +63,7 @@ describe('JSON Tests', () => {
       });
   });
 
-  it('process: should process the file with no refs', (done) => {
+  it('process: should process the file with no ref settings', (done) => {
     const jsonContent = fs.readFileSync(JSON_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
     fs.writeFileSync(JSON_FILE, jsonContent, 'utf-8');
     const jsonProcessor = require('../lib/processor-json');
@@ -75,7 +81,7 @@ describe('JSON Tests', () => {
       });
   });
 
-  it('process: should process the file with refs', (done) => {
+  it('process: should process the file with ref settings', (done) => {
     const jsonContent = fs.readFileSync(JSON_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
     const jsonRefContent = fs.readFileSync(JSON_REF_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
     fs.writeFileSync(JSON_FILE, jsonContent, 'utf-8');

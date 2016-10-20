@@ -8,6 +8,7 @@ const td = require('testdouble');
 describe('INI Tests', () => {
   const INI_FILE = '/tmp/file.ini';
   const INI_REF_FILE = '/tmp/file-refs.ini';
+  const INI_MERGE_FILE = '/tmp/file-merge.ini';
   const INI_FILE_WRITE = '/tmp/file-write.ini';
 
   beforeEach(() => {});
@@ -21,6 +22,11 @@ describe('INI Tests', () => {
     }
     try {
       fs.unlinkSync(INI_REF_FILE);
+    } catch (e) {
+      // suppress error
+    }
+    try {
+      fs.unlinkSync(INI_MERGE_FILE);
     } catch (e) {
       // suppress error
     }
@@ -39,7 +45,7 @@ describe('INI Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Empty file, nothing to process.');
+        should(err).be.eql('Requires a file path to process.');
         done();
       });
   });
@@ -61,7 +67,7 @@ describe('INI Tests', () => {
       });
   });
 
-  it('process: should process the file with no refs', (done) => {
+  it('process: should process the file with no ref settings', (done) => {
     const iniContent = fs.readFileSync(INI_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
     fs.writeFileSync(INI_FILE, iniContent, 'utf-8');
     const iniProcessor = require('../lib/processor-ini');
@@ -79,7 +85,7 @@ describe('INI Tests', () => {
       });
   });
 
-  it('process: should process the file with refs', (done) => {
+  it('process: should process the file with ref settings', (done) => {
     const iniContent = fs.readFileSync(INI_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
     const iniRefContent = fs.readFileSync(INI_REF_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
     fs.writeFileSync(INI_FILE, iniContent, 'utf-8');
@@ -96,6 +102,25 @@ describe('INI Tests', () => {
       })
       .catch((err) => {
         done(err);
+      });
+  });
+
+  it('process: should throw error with merge settings', (done) => {
+    const iniContent = fs.readFileSync(INI_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    const iniRefContent = fs.readFileSync(INI_REF_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    const iniMergeContent = fs.readFileSync(INI_MERGE_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    fs.writeFileSync(INI_FILE, iniContent, 'utf-8');
+    fs.writeFileSync(INI_REF_FILE, iniRefContent, 'utf-8');
+    fs.writeFileSync(INI_MERGE_FILE, iniMergeContent, 'utf-8');
+    const iniProcessor = require('../lib/processor-ini');
+
+    iniProcessor.process(INI_MERGE_FILE)
+      .then(() => {
+        done('Rejection failed.');
+      })
+      .catch((err) => {
+        should(err).be.eql('INI config does not support $merge settings.');
+        done();
       });
   });
 
@@ -146,12 +171,6 @@ describe('INI Tests', () => {
   });
 
   it('dump: should dump to output file', (done) => {
-    // td.replace('node-ini', {
-    //   dump: compiled => JSON.stringify(compiled),
-    //   schema: {
-    //     defaultFull: ini.schema.defaultFull,
-    //   },
-    // });
     const iniProcessor = require('../lib/processor-ini');
 
     iniProcessor.dump({ test: true })
