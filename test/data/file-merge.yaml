@@ -1,0 +1,4 @@
+test:
+  $merge:
+    - $ref: ./file.yaml
+    - $ref: ./file-refs.yaml
