@@ -101,6 +101,63 @@ describe('JSON Tests', () => {
       });
   });
 
+  it('process: should throw error the file with malformed merge settings', (done) => {
+    fs.writeFileSync(JSON_MERGE_FILE, '{"$merge":[{"one":true},{"two":true}]}', 'utf-8');
+    const jsonProcessor = require('../lib/processor-json');
+
+    jsonProcessor.process(JSON_MERGE_FILE)
+      .then(() => {
+        done('Rejection failed.');
+      })
+      .catch((err) => {
+        should(err).be.eql('Malformed merge setting, please check the input file.');
+        done();
+      });
+  });
+
+  it('process: should throw error the file with malformed merge settings with ref settings', (done) => {
+    fs.writeFileSync(JSON_MERGE_FILE, '{"$merge":[{"one":true},{"two":true}]}', 'utf-8');
+    const jsonContent = fs.readFileSync(JSON_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    const jsonRefContent = fs.readFileSync(JSON_REF_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    const jsonMergeContent = fs.readFileSync(JSON_MERGE_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    fs.writeFileSync(JSON_FILE, jsonContent, 'utf-8');
+    fs.writeFileSync(JSON_REF_FILE, jsonRefContent, 'utf-8');
+    const jsonMergeContentMalformed = JSON.stringify(Object.assign({}, JSON.parse(jsonMergeContent), JSON.parse('{"another":{"$merge":[{"one":true},{"two":true}]}}')));
+    fs.writeFileSync(JSON_MERGE_FILE, jsonMergeContentMalformed, 'utf-8');
+    const jsonProcessor = require('../lib/processor-json');
+
+    jsonProcessor.process(JSON_MERGE_FILE)
+      .then(() => {
+        done('Rejection failed.');
+      })
+      .catch((err) => {
+        should(err).be.eql('Malformed merge setting, please check the input file.');
+        done();
+      });
+  });
+
+  it('process: should process the file with merge settings', (done) => {
+    const jsonContent = fs.readFileSync(JSON_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    const jsonRefContent = fs.readFileSync(JSON_REF_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    const jsonMergeContent = fs.readFileSync(JSON_MERGE_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
+    fs.writeFileSync(JSON_FILE, jsonContent, 'utf-8');
+    fs.writeFileSync(JSON_REF_FILE, jsonRefContent, 'utf-8');
+    fs.writeFileSync(JSON_MERGE_FILE, jsonMergeContent, 'utf-8');
+    const jsonProcessor = require('../lib/processor-json');
+
+    jsonProcessor.process(JSON_MERGE_FILE)
+      .then((results) => {
+        should(results).be.eql({
+          dataString: '{"test":{"test":true,"another":{"test":true}}}',
+          key: undefined,
+        });
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
   it('write: should throw error on write', (done) => {
     td.replace(fs, 'writeFile', (outputFile, data, option, cb) => cb('An error occurred.'));
     const jsonProcessor = require('../lib/processor-json');

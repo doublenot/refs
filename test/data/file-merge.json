@@ -1,0 +1,9 @@
+{
+  "test": {
+    "$merge": [{
+      "$ref": "./file.json"
+    }, {
+      "$ref": "./file-refs.json"
+    }]
+  }
+}
