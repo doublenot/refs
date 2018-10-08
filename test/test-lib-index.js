@@ -49,7 +49,7 @@ describe('Index Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('TypeError: Cannot read property \'indexOf\' of undefined');
+        should(err).be.eql(new Error('TypeError: Cannot read property \'indexOf\' of undefined'));
         done();
       });
   });
@@ -62,7 +62,7 @@ describe('Index Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('No such file or directory.');
+        should(err).be.eql(new Error('No such file or directory.'));
         done();
       });
   });
@@ -75,7 +75,7 @@ describe('Index Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('No valid config file found.');
+        should(err).be.eql(new Error('No valid config file found.'));
         done();
       });
   });
@@ -88,7 +88,7 @@ describe('Index Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('No valid config file found.');
+        should(err).be.eql(new Error('No valid config file found.'));
         done();
       });
   });
@@ -105,14 +105,14 @@ describe('Index Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Error: An error occurred.');
+        should(err).be.eql(new Error('Error: An error occurred.'));
         done();
       });
   });
 
   it('should throw error and exit when processor.process rejects with error', (done) => {
     fs.writeFileSync(YAML_FILE, '', 'utf-8');
-    td.replace(yamlProcessor, 'process', () => new Promise((resolve, reject) => reject('An error occurred.')));
+    td.replace(yamlProcessor, 'process', () => new Promise((resolve, reject) => reject(new Error('An error occurred.'))));
     const refs = require('../index');
 
     refs(YAML_FILE)
@@ -120,7 +120,7 @@ describe('Index Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('An error occurred.');
+        should(err).be.eql(new Error('An error occurred.'));
         done();
       });
   });
@@ -128,7 +128,7 @@ describe('Index Tests', () => {
   it('should throw error and exit when processor.process resolves with incorrect data', (done) => {
     fs.writeFileSync(INI_FILE, '', 'utf-8');
     td.replace(iniProcessor, 'process', () => new Promise(resolve => resolve({})));
-    // td.replace(yamlProcessor, 'dump', () => new Promise((resolve, reject) => reject('An error occurred.')));
+    // td.replace(yamlProcessor, 'dump', () => new Promise((resolve, reject) => reject(new Error('An error occurred.'))));
     const refs = require('../index');
 
     refs(INI_FILE)
@@ -136,7 +136,7 @@ describe('Index Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('An error occurred while parsing JSON string.');
+        should(err).be.eql(new Error('An error occurred while parsing JSON string.'));
         done();
       });
   });
@@ -144,7 +144,7 @@ describe('Index Tests', () => {
   it('should throw error and exit when processor.dump rejects with error', (done) => {
     fs.writeFileSync(YAML_FILE, '', 'utf-8');
     td.replace(yamlProcessor, 'process', () => new Promise(resolve => resolve({ dataString: '{"test":true}' })));
-    td.replace(yamlProcessor, 'dump', () => new Promise((resolve, reject) => reject('An error occurred.')));
+    td.replace(yamlProcessor, 'dump', () => new Promise((resolve, reject) => reject(new Error('An error occurred.'))));
     const refs = require('../index');
 
     refs(YAML_FILE)
@@ -152,7 +152,7 @@ describe('Index Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('An error occurred.');
+        should(err).be.eql(new Error('An error occurred.'));
         done();
       });
   });
@@ -160,7 +160,7 @@ describe('Index Tests', () => {
   it('should throw error and exit when processor.write rejects with error', (done) => {
     fs.writeFileSync(YAML_FILE, '', 'utf-8');
     td.replace(yamlProcessor, 'process', () => new Promise(resolve => resolve({ dataString: '{"test":true}' })));
-    td.replace(yamlProcessor, 'write', () => new Promise((resolve, reject) => reject('An error occurred.')));
+    td.replace(yamlProcessor, 'write', () => new Promise((resolve, reject) => reject(new Error('An error occurred.'))));
     const refs = require('../index');
 
     refs(YAML_FILE, '/tmp/new.yaml')
@@ -168,7 +168,7 @@ describe('Index Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('An error occurred.');
+        should(err).be.eql(new Error('An error occurred.'));
         done();
       });
   });

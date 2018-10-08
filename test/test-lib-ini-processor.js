@@ -45,7 +45,7 @@ describe('INI Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Requires a file path to process.');
+        should(err).be.eql(new Error('Requires a file path to process.'));
         done();
       });
   });
@@ -62,7 +62,7 @@ describe('INI Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Empty file, nothing to process.');
+        should(err).be.eql(new Error('Empty file, nothing to process.'));
         done();
       });
   });
@@ -119,13 +119,13 @@ describe('INI Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('INI config does not support $merge settings.');
+        should(err).be.eql(new Error('INI config does not support $merge settings.'));
         done();
       });
   });
 
   it('write: should throw error on write', (done) => {
-    td.replace(fs, 'writeFile', (outputFile, compiled, options, cb) => cb('An error occurred.'));
+    td.replace(fs, 'writeFile', (outputFile, compiled, options, cb) => cb(new Error('An error occurred.')));
     const iniProcessor = require('../lib/processor-ini');
 
     iniProcessor.write(INI_FILE_WRITE, { test: true })
@@ -133,7 +133,7 @@ describe('INI Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('An error occurred.');
+        should(err).be.eql(new Error('An error occurred.'));
         done();
       });
   });
@@ -165,7 +165,7 @@ describe('INI Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Error: An error occurred.');
+        should(err).be.eql(new Error('Error: An error occurred.'));
         done();
       });
   });

@@ -45,7 +45,7 @@ describe('YAML Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Requires a file path to process.');
+        should(err).be.eql(new Error('Requires a file path to process.'));
         done();
       });
   });
@@ -59,7 +59,7 @@ describe('YAML Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Empty file, nothing to process.');
+        should(err).be.eql(new Error('Empty file, nothing to process.'));
         done();
       });
   });
@@ -111,7 +111,7 @@ describe('YAML Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Malformed merge setting, please check the input file.');
+        should(err).be.eql(new Error('Malformed merge setting, please check the input file.'));
         done();
       });
   });
@@ -130,7 +130,7 @@ describe('YAML Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Malformed merge setting, please check the input file.');
+        should(err).be.eql(new Error('Malformed merge setting, please check the input file.'));
         done();
       });
   });
@@ -159,7 +159,7 @@ describe('YAML Tests', () => {
 
   it('write: should throw error on write', (done) => {
     td.replace('node-yaml', {
-      write: (outputFile, compiled, options, cb) => cb('An error occurred.'),
+      write: (outputFile, compiled, options, cb) => cb(new Error('An error occurred.')),
       schema: {
         defaultFull: yaml.schema.defaultFull,
       },
@@ -171,7 +171,7 @@ describe('YAML Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('An error occurred.');
+        should(err).be.eql(new Error('An error occurred.'));
         done();
       });
   });
@@ -213,7 +213,7 @@ describe('YAML Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Error: An error occurred.');
+        should(err).be.eql(new Error('Error: An error occurred.'));
         done();
       });
   });

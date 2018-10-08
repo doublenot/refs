@@ -44,7 +44,7 @@ describe('JSON Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Requires a file path to process.');
+        should(err).be.eql(new Error('Requires a file path to process.'));
         done();
       });
   });
@@ -58,7 +58,7 @@ describe('JSON Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Empty file, nothing to process.');
+        should(err).be.eql(new Error('Empty file, nothing to process.'));
         done();
       });
   });
@@ -110,7 +110,7 @@ describe('JSON Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Malformed merge setting, please check the input file.');
+        should(err).be.eql(new Error('Malformed merge setting, please check the input file.'));
         done();
       });
   });
@@ -131,7 +131,7 @@ describe('JSON Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('Malformed merge setting, please check the input file.');
+        should(err).be.eql(new Error('Malformed merge setting, please check the input file.'));
         done();
       });
   });
@@ -159,7 +159,7 @@ describe('JSON Tests', () => {
   });
 
   it('write: should throw error on write', (done) => {
-    td.replace(fs, 'writeFile', (outputFile, data, option, cb) => cb('An error occurred.'));
+    td.replace(fs, 'writeFile', (outputFile, data, option, cb) => cb(new Error('An error occurred.')));
     const jsonProcessor = require('../lib/processor-json');
 
     jsonProcessor.write(JSON_FILE_WRITE, { test: true })
@@ -167,7 +167,7 @@ describe('JSON Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql('An error occurred.');
+        should(err).be.eql(new Error('An error occurred.'));
         done();
       });
   });

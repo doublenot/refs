@@ -16,8 +16,9 @@ program
   .option('-o, --output <file>', 'The path for the output file');
 
 program.parse(process.argv);
-if (program.args[0]) {
-  inputFile = program.args[0];
+const [firstArg] = program.args;
+if (firstArg) {
+  inputFile = firstArg;
 }
 if (program.output) {
   outputFile = program.output;
@@ -26,7 +27,7 @@ if (program.output) {
 if (inputFile) {
   refs(inputFile, outputFile)
     .then((results) => {
-      let msg = `\n  done`;
+      let msg = '\n  done';
       if (results.outputFile) {
         msg = `\n  done, file written: ${results.outputFile}`;
       }
