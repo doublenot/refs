@@ -2,7 +2,7 @@
 
 const should = require('should');
 const td = require('testdouble');
-const exec = require('child_process').exec;
+const { exec } = require('child_process');
 const fs = require('fs');
 
 describe('Bin Tests', () => {
@@ -10,15 +10,12 @@ describe('Bin Tests', () => {
   const YAML_FILE = '/tmp/file.yaml';
 
   beforeEach(() => {
-    stdoutContent = `
-  Usage: refs [options] <file>
+    stdoutContent = `Usage: refs [options] <file>
 
-  Options:
-
-    -h, --help           output usage information
-    -V, --version        output the version number
-    -o, --output <file>  The path for the output file
-
+Options:
+  -V, --version        output the version number
+  -o, --output <file>  The path for the output file
+  -h, --help           output usage information
 `;
   });
 
