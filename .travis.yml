@@ -2,7 +2,8 @@ language: node_js
 node_js:
 - v6.14.4
 - v8.12.0
-- v10.11.0
+- v10.15.0
+- v11.6.0
 sudo: false
 before_install:
 - npm install -g npm
