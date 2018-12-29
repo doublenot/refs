@@ -1,6 +1,6 @@
 {
   "name": "refs",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Compile and merge YAML, JSON or INI config files together through file path references",
   "main": "index.js",
   "preferGlobal": true,
