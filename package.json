@@ -12,8 +12,8 @@
   },
   "scripts": {
     "test": "npm run lint && npm run test-all",
-    "coverage": "istanbul cover _mocha test/all",
-    "coveralls": "istanbul cover _mocha test/all && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "coverage": "nyc mocha test/all",
+    "coveralls": "nyc mocha test/all && nyc report --reporter=text-lcov | coveralls && rm -rf ./coverage",
     "lint": "./node_modules/.bin/eslint index.js lib/ bin/ test/",
     "test-all": "mocha test/all"
   },
