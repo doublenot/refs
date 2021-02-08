@@ -1,6 +1,6 @@
 {
   "name": "refs",
-  "version": "0.9.4",
+  "version": "0.9.6",
   "description": "Compile and merge YAML, JSON or INI config files together through file path references",
   "main": "index.js",
   "preferGlobal": true,
@@ -8,7 +8,7 @@
     "refs": "bin/refs.js"
   },
   "engines": {
-    "node": ">=6.4.4"
+    "node": ">=8.17.0"
   },
   "scripts": {
     "test": "npm run lint && npm run test-all",
@@ -38,8 +38,9 @@
   "dependencies": {
     "bluebird": "^3.4.6",
     "commander": "^2.9.0",
-    "ini": "^1.3.4",
-    "node-yaml": "^3.1.1"
+    "ini": "^1.3.8",
+    "js-yaml": "^4.0.0",
+    "node-yaml": "^4.0.1"
   },
   "devDependencies": {
     "coveralls": "^3.0.2",
@@ -49,8 +50,8 @@
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-react": "^7.11.1",
-    "istanbul": "^0.4.5",
-    "mocha": "^5.2.0",
+    "mocha": "^6.2.3",
+    "nyc": "^15.1.0",
     "should": "^13.2.3",
     "testdouble": "^3.8.2"
   }

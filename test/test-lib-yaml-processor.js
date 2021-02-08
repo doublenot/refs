@@ -2,7 +2,6 @@
 
 const should = require('should');
 const fs = require('fs');
-const yaml = require('node-yaml');
 const td = require('testdouble');
 
 describe('YAML Tests', () => {
@@ -40,7 +39,8 @@ describe('YAML Tests', () => {
   it('process: should throw error with no arguments', (done) => {
     const yamlProcessor = require('../lib/processor-yaml');
 
-    yamlProcessor.process()
+    yamlProcessor
+      .process()
       .then(() => {
         done('Rejection failed.');
       })
@@ -54,7 +54,8 @@ describe('YAML Tests', () => {
     fs.writeFileSync(YAML_FILE, '', 'utf-8');
     const yamlProcessor = require('../lib/processor-yaml');
 
-    yamlProcessor.process(YAML_FILE)
+    yamlProcessor
+      .process(YAML_FILE)
       .then(() => {
         done('Rejection failed.');
       })
@@ -69,7 +70,8 @@ describe('YAML Tests', () => {
     fs.writeFileSync(YAML_FILE, yamlContent, 'utf-8');
     const yamlProcessor = require('../lib/processor-yaml');
 
-    yamlProcessor.process(YAML_FILE)
+    yamlProcessor
+      .process(YAML_FILE)
       .then((results) => {
         should(results).be.eql({
           dataString: '{"test":true}',
@@ -89,7 +91,8 @@ describe('YAML Tests', () => {
     fs.writeFileSync(YAML_REF_FILE, yamlRefContent, 'utf-8');
     const yamlProcessor = require('../lib/processor-yaml');
 
-    yamlProcessor.process(YAML_REF_FILE)
+    yamlProcessor
+      .process(YAML_REF_FILE)
       .then((results) => {
         should(results).be.eql({
           dataString: '{"another":{"test":true}}',
@@ -106,7 +109,8 @@ describe('YAML Tests', () => {
     fs.writeFileSync(YAML_MERGE_FILE, '$merge:\n  - one: true\n  - two: true\n', 'utf-8');
     const yamlProcessor = require('../lib/processor-yaml');
 
-    yamlProcessor.process(YAML_MERGE_FILE)
+    yamlProcessor
+      .process(YAML_MERGE_FILE)
       .then(() => {
         done('Rejection failed.');
       })
@@ -122,10 +126,15 @@ describe('YAML Tests', () => {
     const yamlMergeContent = fs.readFileSync(YAML_MERGE_FILE.replace('/tmp', `${__dirname}/data`), 'utf-8');
     fs.writeFileSync(YAML_FILE, yamlContent, 'utf-8');
     fs.writeFileSync(YAML_REF_FILE, yamlRefContent, 'utf-8');
-    fs.writeFileSync(YAML_MERGE_FILE, `${yamlMergeContent}\nanother:\n  $merge:\n    - one: true\n    - two: true\n`, 'utf-8');
+    fs.writeFileSync(
+      YAML_MERGE_FILE,
+      `${yamlMergeContent}\nanother:\n  $merge:\n    - one: true\n    - two: true\n`,
+      'utf-8',
+    );
     const yamlProcessor = require('../lib/processor-yaml');
 
-    yamlProcessor.process(YAML_MERGE_FILE)
+    yamlProcessor
+      .process(YAML_MERGE_FILE)
       .then(() => {
         done('Rejection failed.');
       })
@@ -144,7 +153,8 @@ describe('YAML Tests', () => {
     fs.writeFileSync(YAML_MERGE_FILE, yamlMergeContent, 'utf-8');
     const yamlProcessor = require('../lib/processor-yaml');
 
-    yamlProcessor.process(YAML_MERGE_FILE)
+    yamlProcessor
+      .process(YAML_MERGE_FILE)
       .then((results) => {
         should(results).be.eql({
           dataString: '{"test":{"test":true,"another":{"test":true}}}',
@@ -160,13 +170,11 @@ describe('YAML Tests', () => {
   it('write: should throw error on write', (done) => {
     td.replace('node-yaml', {
       write: (outputFile, compiled, options, cb) => cb(new Error('An error occurred.')),
-      schema: {
-        defaultFull: yaml.schema.defaultFull,
-      },
     });
     const yamlProcessor = require('../lib/processor-yaml');
 
-    yamlProcessor.write(YAML_FILE_WRITE, { test: true })
+    yamlProcessor
+      .write(YAML_FILE_WRITE, { test: true })
       .then(() => {
         done('Rejection failed.');
       })
@@ -179,13 +187,11 @@ describe('YAML Tests', () => {
   it('write: should write to output file', (done) => {
     td.replace('node-yaml', {
       write: (outputFile, compiled, options, cb) => cb(),
-      schema: {
-        defaultFull: yaml.schema.defaultFull,
-      },
     });
     const yamlProcessor = require('../lib/processor-yaml');
 
-    yamlProcessor.write(YAML_FILE_WRITE, { test: true })
+    yamlProcessor
+      .write(YAML_FILE_WRITE, { test: true })
       .then((results) => {
         should(results).be.eql({
           outputFile: YAML_FILE_WRITE,
@@ -202,13 +208,11 @@ describe('YAML Tests', () => {
       dump: () => {
         throw new Error('An error occurred.');
       },
-      schema: {
-        defaultFull: yaml.schema.defaultFull,
-      },
     });
     const yamlProcessor = require('../lib/processor-yaml');
 
-    yamlProcessor.dump({ test: true })
+    yamlProcessor
+      .dump({ test: true })
       .then(() => {
         done('Rejection failed.');
       })
@@ -220,14 +224,12 @@ describe('YAML Tests', () => {
 
   it('dump: should dump to output file', (done) => {
     td.replace('node-yaml', {
-      dump: compiled => JSON.stringify(compiled),
-      schema: {
-        defaultFull: yaml.schema.defaultFull,
-      },
+      dump: (compiled) => JSON.stringify(compiled),
     });
     const yamlProcessor = require('../lib/processor-yaml');
 
-    yamlProcessor.dump({ test: true })
+    yamlProcessor
+      .dump({ test: true })
       .then((results) => {
         should(results).be.eql({
           content: JSON.stringify({ test: true }),
