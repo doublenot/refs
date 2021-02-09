@@ -8,7 +8,7 @@
     "refs": "bin/refs.js"
   },
   "engines": {
-    "node": ">=8.17.0"
+    "node": ">=9.0.0"
   },
   "scripts": {
     "test": "npm run lint && npm run test-all",
