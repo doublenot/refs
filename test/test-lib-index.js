@@ -49,7 +49,7 @@ describe('Index Tests', () => {
         done('Rejection failed.');
       })
       .catch((err) => {
-        should(err).be.eql(new Error('TypeError: Cannot read property \'indexOf\' of undefined'));
+        should(err).be.eql(new Error('No such file or directory.'));
         done();
       });
   });
@@ -112,7 +112,11 @@ describe('Index Tests', () => {
 
   it('should throw error and exit when processor.process rejects with error', (done) => {
     fs.writeFileSync(YAML_FILE, '', 'utf-8');
-    td.replace(yamlProcessor, 'process', () => new Promise((resolve, reject) => reject(new Error('An error occurred.'))));
+    td.replace(
+      yamlProcessor,
+      'process',
+      () => new Promise((resolve, reject) => reject(new Error('An error occurred.'))),
+    );
     const refs = require('../index');
 
     refs(YAML_FILE)
@@ -127,7 +131,7 @@ describe('Index Tests', () => {
 
   it('should throw error and exit when processor.process resolves with incorrect data', (done) => {
     fs.writeFileSync(INI_FILE, '', 'utf-8');
-    td.replace(iniProcessor, 'process', () => new Promise(resolve => resolve({})));
+    td.replace(iniProcessor, 'process', () => new Promise((resolve) => resolve({})));
     // td.replace(yamlProcessor, 'dump', () => new Promise((resolve, reject) => reject(new Error('An error occurred.'))));
     const refs = require('../index');
 
@@ -143,7 +147,7 @@ describe('Index Tests', () => {
 
   it('should throw error and exit when processor.dump rejects with error', (done) => {
     fs.writeFileSync(YAML_FILE, '', 'utf-8');
-    td.replace(yamlProcessor, 'process', () => new Promise(resolve => resolve({ dataString: '{"test":true}' })));
+    td.replace(yamlProcessor, 'process', () => new Promise((resolve) => resolve({ dataString: '{"test":true}' })));
     td.replace(yamlProcessor, 'dump', () => new Promise((resolve, reject) => reject(new Error('An error occurred.'))));
     const refs = require('../index');
 
@@ -159,7 +163,7 @@ describe('Index Tests', () => {
 
   it('should throw error and exit when processor.write rejects with error', (done) => {
     fs.writeFileSync(YAML_FILE, '', 'utf-8');
-    td.replace(yamlProcessor, 'process', () => new Promise(resolve => resolve({ dataString: '{"test":true}' })));
+    td.replace(yamlProcessor, 'process', () => new Promise((resolve) => resolve({ dataString: '{"test":true}' })));
     td.replace(yamlProcessor, 'write', () => new Promise((resolve, reject) => reject(new Error('An error occurred.'))));
     const refs = require('../index');
 
@@ -175,8 +179,8 @@ describe('Index Tests', () => {
 
   it('should process file correctly', (done) => {
     fs.writeFileSync(YAML_FILE, '', 'utf-8');
-    td.replace(yamlProcessor, 'process', () => new Promise(resolve => resolve({ dataString: '{"test":true}' })));
-    td.replace(yamlProcessor, 'dump', () => new Promise(resolve => resolve({ outputFile: YAML_FILE })));
+    td.replace(yamlProcessor, 'process', () => new Promise((resolve) => resolve({ dataString: '{"test":true}' })));
+    td.replace(yamlProcessor, 'dump', () => new Promise((resolve) => resolve({ outputFile: YAML_FILE })));
     const refs = require('../index');
 
     refs(YAML_FILE)
